@@ -1,14 +1,12 @@
 import data.DataManager;
 import data.models.PopulationData;
-import processor.CityStatsProcessor;
-import processor.HousingProcessor;
-import processor.ParkingProcessor;
-import processor.PopulationProcessor;
+import processor.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         DataManager dm = new DataManager();
-        dm.loadAllData("csv", "src/main/resources/parking.csv",
+        dm.loadAllData("csv",
+                "src/main/resources/parking.csv",
                 "src/main/resources/properties.csv",
                 "src/main/resources/population.txt");
 
@@ -22,8 +20,7 @@ public class Main {
 
         CityStatsProcessor stats = new CityStatsProcessor(pop, housing, parking);
 
-        System.out.println(stats.getViolationsPerCapita("19104")); // valid
-        System.out.println(stats.getViolationsPerCapita("abcde")); // INVALID – must return 0 or throw
-        System.out.println(stats.getViolationsPerCapita(null));    // INVALID – must return 0 or throw
+        // TODO: hook this into your UI layer (menu)
+        // System.out.println(stats.getTotalPopulation());
     }
 }
