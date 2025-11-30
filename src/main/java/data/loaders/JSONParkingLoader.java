@@ -1,5 +1,5 @@
-package parkanalysis.data.loaders;
-import parkanalysis.data.models.ParkingViolation;
+package data.loaders;
+import data.models.ParkingViolation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

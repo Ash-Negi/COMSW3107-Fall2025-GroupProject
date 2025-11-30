@@ -1,8 +1,8 @@
-package parkanalysis.data;
-import parkanalysis.data.loaders.*;
-import parkanalysis.data.models.ParkingViolation;
-import parkanalysis.data.models.Property;
-import parkanalysis.data.models.PopulationData;
+package data;
+import data.loaders.*;
+import data.models.ParkingViolation;
+import data.models.Property;
+import data.models.PopulationData;
 
 import java.util.List;
 import java.util.Map;

@@ -3,7 +3,7 @@ package processor;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import data.ParkingViolation;
+import data.models.ParkingViolation;
 
 public class ParkingProcessor {
 

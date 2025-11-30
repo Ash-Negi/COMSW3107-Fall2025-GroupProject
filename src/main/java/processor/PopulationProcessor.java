@@ -1,8 +1,8 @@
 package processor;
 
-import data.PopulationData;
-import data.Property;
-import data.ParkingViolation;
+import data.models.PopulationData;
+import data.models.Property;
+import data.models.ParkingViolation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

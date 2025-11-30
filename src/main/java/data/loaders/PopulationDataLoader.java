@@ -1,5 +1,5 @@
-package parkanalysis.data.loaders;
-import parkanalysis.data.models.PopulationData;
+package data.loaders;
+import data.models.PopulationData;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

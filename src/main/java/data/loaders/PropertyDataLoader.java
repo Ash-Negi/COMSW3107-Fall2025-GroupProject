@@ -1,5 +1,5 @@
-package parkanalysis.data.loaders;
-import parkanalysis.data.models.Property;
+package data.loaders;
+import data.models.Property;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

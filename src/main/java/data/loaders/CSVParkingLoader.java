@@ -1,6 +1,6 @@
-package parkanalysis.data.loaders;
+package data.loaders;
 
-import parkanalysis.data.models.ParkingViolation;
+import data.models.ParkingViolation;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

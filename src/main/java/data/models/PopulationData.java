@@ -1,4 +1,4 @@
-package parkanalysis.data.models;
+package data.models;
 
 public class PopulationData {
     private String zipCode;

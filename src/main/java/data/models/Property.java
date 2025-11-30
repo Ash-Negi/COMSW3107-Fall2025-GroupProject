@@ -1,4 +1,4 @@
-package parkanalysis.data.models;
+package data.models;
 
 public class Property {
     private double marketValue;

@@ -1,0 +1,14 @@
+data/models/ParkingViolation.class
+data/loaders/PropertyDataLoader.class
+processor/HousingProcessor.class
+data/loaders/PopulationDataLoader.class
+data/loaders/ParkingDataLoader.class
+data/models/Property.class
+processor/ParkingProcessor.class
+Main.class
+processor/CityStatsProcessor.class
+processor/PopulationProcessor.class
+data/models/PopulationData.class
+data/loaders/CSVParkingLoader.class
+data/loaders/JSONParkingLoader.class
+data/DataManager.class

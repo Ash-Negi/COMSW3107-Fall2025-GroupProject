@@ -1,5 +1,5 @@
-package parkanalysis.data.loaders;
-import parkanalysis.data.models.ParkingViolation;
+package data.loaders;
+import data.models.ParkingViolation;
 import java.util.List;
 
 public interface ParkingDataLoader {
