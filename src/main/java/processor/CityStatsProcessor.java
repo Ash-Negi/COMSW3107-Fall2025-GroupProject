@@ -7,6 +7,13 @@ import processor.PopulationProcessor;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * processing layer interface for the UI.
+ *
+ * This class delegates to PopulationProcessor, HousingProcessor,
+ * and ParkingProcessor internally, but the UI should never access
+ * those classes directly.
+ */
 public class CityStatsProcessor {
 
     PopulationProcessor population;
