@@ -26,6 +26,8 @@ replay_pid*
 .DS_Store
 
 # Real datasets - didn't commit - very large files
-src/main/resources/*.csv
-src/main/resources/*.json
-src/main/resources/*.txt
+/src/main/resources/**/*.csv
+/src/main/resources/**/*.json
+/src/main/resources/**/*.txt
+# Maven build dir
+/target/
