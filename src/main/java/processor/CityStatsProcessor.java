@@ -62,6 +62,10 @@ public class CityStatsProcessor {
 
     // Menu option 6 — Violations per capita for a ZIP
     public double getViolationsPerCapita(String zip) {
+        // reject invalid calls immediately
+        if (zip == null || zip.length() < 5 || !zip.matches("\\d+")) {
+            return 0.0;   // or throw IllegalArgumentException
+        }
         int count = parking.getViolationCountInZip(zip);
         int pop = population.getPopulationForZip(zip);
         if (pop == 0) return 0.0;
