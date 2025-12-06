@@ -73,8 +73,9 @@ public class Menu {
             System.out.printf("%.4f%n", processor.getViolationsPerCapita(zip));
 
         } else if (choice == 7) {
-            System.out.printf("%.2f%n", processor.getAverageFineInPhiladelphia());
-
+//            System.out.printf("%.2f%n", processor.getAverageFineInPhiladelphia());
+            int avg = (int) Math.round(processor.getAverageFineInPhiladelphia());
+            System.out.println(avg);
         } else {}
     }
 

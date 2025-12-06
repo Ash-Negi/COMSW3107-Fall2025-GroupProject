@@ -1,23 +1,19 @@
 import data.DataManager;
 import data.models.PopulationData;
 import processor.*;
+import processor.cache.StatsCache;
+
 import java.io.File;
 import java.util.List;
-import processor.CityStatsProcessor;
-import processor.HousingProcessor;
-import processor.ParkingProcessor;
-import processor.PopulationProcessor;
-
-
 
 public class Main {
 
     public static void main(String[] args) {
 
+        //  Validate runtime arguments
         if (args.length != 4) {
             System.err.println("Incorrect number of arguments.");
-            System.err.println("Usage:");
-            System.err.println("  java Main <csv|json> <parkingFile> <propertyFile> <populationFile>");
+            System.err.println("Usage: java Main <csv|json> <parkingFile> <propertyFile> <populationFile>");
             return;
         }
 
@@ -27,23 +23,20 @@ public class Main {
         String populationFile = args[3];
 
         if (!format.equals("csv") && !format.equals("json")) {
-            System.err.println("Error: First argument must be 'csv' or 'json'.");
+            System.err.println("Error: first argument must be 'csv' or 'json'.");
             return;
         }
 
-        if (fileMissing(parkingFile) ||
-                fileMissing(propertyFile) ||
-                fileMissing(populationFile))
-        {
+        if (missingFile(parkingFile) || missingFile(propertyFile) || missingFile(populationFile)) {
             System.err.println("Error: One or more input files do not exist:");
-            if (fileMissing(parkingFile)) System.err.println("  Missing: " + parkingFile);
-            if (fileMissing(propertyFile)) System.err.println("  Missing: " + propertyFile);
-            if (fileMissing(populationFile)) System.err.println("  Missing: " + populationFile);
+            if (missingFile(parkingFile)) System.err.println("  Missing: " + parkingFile);
+            if (missingFile(propertyFile)) System.err.println("  Missing: " + propertyFile);
+            if (missingFile(populationFile)) System.err.println("  Missing: " + populationFile);
             return;
         }
 
         try {
-            // Load data
+            //  Load raw data using DataManager
             DataManager dm = new DataManager();
             dm.loadAllData(format, parkingFile, propertyFile, populationFile);
 
@@ -54,13 +47,20 @@ public class Main {
                     .entrySet().stream()
                     .map(e -> new PopulationData(e.getKey(), e.getValue()))
                     .toList();
+            PopulationProcessor population = new PopulationProcessor(popList);
 
-            PopulationProcessor pop = new PopulationProcessor(popList);
+            //  Build the StatsCache (Singleton)
+            StatsCache.initializeCacheBuild(housing, parking, population);
 
-            CityStatsProcessor cityStats = new CityStatsProcessor(pop, housing, parking);
+            CityStatsProcessor stats = new CityStatsProcessor(
+                    population,
+                    housing,
+                    parking,
+                    StatsCache.getInstance()
+            );
 
-            // Start UI
-            ui.Menu menu = new ui.Menu(cityStats);
+            //  Launch Menu UI
+            ui.Menu menu = new ui.Menu(stats);
             menu.start();
 
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class Main {
         }
     }
 
-    private static boolean fileMissing(String path) {
+    private static boolean missingFile(String path) {
         File f = new File(path);
         return !f.exists() || f.isDirectory();
     }

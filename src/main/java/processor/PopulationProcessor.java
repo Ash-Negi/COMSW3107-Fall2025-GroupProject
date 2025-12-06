@@ -6,6 +6,7 @@ import data.models.ParkingViolation;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PopulationProcessor {
 
@@ -44,5 +45,10 @@ public class PopulationProcessor {
             return 0;
         }
         return populationByZip.get(zip);
+    }
+
+    //helper to get set of zip codes
+    public Set<String> getAllZipCodes(){
+        return populationByZip.keySet();
     }
 }

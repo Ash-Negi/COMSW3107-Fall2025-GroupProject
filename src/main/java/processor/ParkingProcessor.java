@@ -18,7 +18,7 @@ public class ParkingProcessor {
         Map<String, Double> finesByZip = new HashMap<>();
 
         for (ParkingViolation v : violations) {
-            // skip entries with missing zip or non-PA state
+            // Defensive programming, we skip entries with missing zip or non-PA state
             if (v.getZipCode() == null || v.getZipCode().isEmpty()) continue;
             if (!"PA".equals(v.getState())) continue;
 
@@ -34,6 +34,7 @@ public class ParkingProcessor {
 
     //Menu option 6
     public int getViolationCountInZip(String zip){
+
         if (zip == null || zip.isEmpty()) return 0;
 
         int count = 0;
