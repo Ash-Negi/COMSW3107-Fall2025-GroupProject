@@ -5,6 +5,9 @@ import data.models.Property;
 import data.models.ParkingViolation;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class HousingProcessor {
 
@@ -16,20 +19,36 @@ public class HousingProcessor {
 
     //option 3
     public double getAverageMarketValue(String zip){
-        double total = 0.0;
+//        double total = 0.0;
+//        int count = 0;
+//
+//        for (Property p : properties) {
+//            if (p.getZipCode() != null && p.getZipCode().equals(zip)) {
+//                double value = p.getMarketValue();
+//                if (value > 0) { // ignore invalid
+//                    total += value;
+//                    count++;
+//                }
+//            }
+//        }
+//
+//        if (count == 0) return 0.0;
+//        return total / count;
+        if (zip == null) return 0;
+
+        double total = 0;
         int count = 0;
 
         for (Property p : properties) {
-            if (p.getZipCode() != null && p.getZipCode().equals(zip)) {
-                double value = p.getMarketValue();
-                if (value > 0) { // ignore invalid
-                    total += value;
-                    count++;
-                }
+            if (zip.equals(p.getZipCode())) {
+                total += p.getMarketValue();
+                count++;
             }
         }
 
-        if (count == 0) return 0.0;
+        System.err.println("FINISHED ZIP=" + zip + "  total=" + total + " count=" + count);
+
+        if (count == 0) return 0;
         return total / count;
     };
 
@@ -79,5 +98,12 @@ public class HousingProcessor {
 
         return count;
     };
+
+    public Set<String> getAllZipCodes() {
+        return properties.stream()
+                .map(Property::getZipCode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
 
 }

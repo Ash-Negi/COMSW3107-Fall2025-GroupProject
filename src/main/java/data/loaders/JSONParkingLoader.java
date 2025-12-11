@@ -43,34 +43,54 @@ public class JSONParkingLoader implements ParkingDataLoader{
 
     private ParkingViolation parseJSONObject(JSONObject jsonObject){
         try{
-            // parse timestamp
-            String timestampStr = (String) jsonObject.get("timestamp");
-            LocalDateTime timestamp = LocalDateTime.parse(timestampStr, DATE_FORMATTER);
+//            // parse timestamp
+//            String timestampStr = (String) jsonObject.get("timestamp");
+//            LocalDateTime timestamp = LocalDateTime.parse(timestampStr, DATE_FORMATTER);
+//
+//            // parse fine
+//            double fine;
+//            Object fineObj = jsonObject.get("fine");
+//            if(fineObj instanceof Number){
+//                fine = ((Number) fineObj).doubleValue();
+//            }
+//            else{
+//                fine = Double.parseDouble((String) fineObj);
+//            }
+//
+//            // extract other fields
+//            String description = (String) jsonObject.get("description");
+//            String vehicleId = (String) jsonObject.get("vehicleId");
+//            String state = (String) jsonObject.get("state");
+//            String violationId = (String) jsonObject.get("violationId");
+//
+//            // handle zip code, might be null
+//            String zipCode = (String) jsonObject.get("zipCode");
+//            if(zipCode != null && zipCode.isEmpty()){
+//                zipCode = null;
+            // timestamp
+            String dateStr = (String) jsonObject.get("date");
+            LocalDateTime timestamp = LocalDateTime.parse(dateStr, DATE_FORMATTER);
 
-            // parse fine
+            // fine
             double fine;
             Object fineObj = jsonObject.get("fine");
-            if(fineObj instanceof Number){
+            if (fineObj instanceof Number) {
                 fine = ((Number) fineObj).doubleValue();
-            }
-            else{
+            } else {
                 fine = Double.parseDouble((String) fineObj);
             }
 
-            // extract other fields
-            String description = (String) jsonObject.get("description");
-            String vehicleId = (String) jsonObject.get("vehicleId");
+            // field mappings
+            String description = (String) jsonObject.get("violation");
+            String vehicleId = (String) jsonObject.get("plate_id");
             String state = (String) jsonObject.get("state");
-            String violationId = (String) jsonObject.get("violationId");
 
-            // handle zip code, might be null
-            String zipCode = (String) jsonObject.get("zipCode");
-            if(zipCode != null && zipCode.isEmpty()){
-                zipCode = null;
-            }
+            String violationId = String.valueOf(jsonObject.get("ticket_number")); // convert numeric → string
+            String zipCode = (String) jsonObject.get("zip_code");
+
+            if (zipCode != null && zipCode.isEmpty()) zipCode = null;
 
             return new ParkingViolation(timestamp, fine, description, vehicleId, state, violationId, zipCode);
-
         }
         catch(Exception e){
             return null;

@@ -71,15 +71,23 @@ public class StatsCache {
 
             //Compute housing statistics Callable
             Callable<Void> housingTask = () -> {
-                for(String zip : population.getAllZipCodes()) {
+                System.err.println("HOUSING TASK STARTED");
+
+                System.err.println("Housing ZIP codes: " + housing.getAllZipCodes());
+                for(String zip : housing.getAllZipCodes()) {
                     double avgMarketVal = housing.getAverageMarketValue(zip);
                     double avgTotalLivableArea = housing.getAverageTotalLivableArea(zip);
                     double totalMktVal = housing.getTotalMarketValue(zip);
+
+                    System.err.println("  avgMarketVal=" + avgMarketVal +
+                            " avgLivableArea=" + avgTotalLivableArea +
+                            " totalMktVal=" + totalMktVal);
 
                     if (avgMarketVal > 0) cache.getAvgMarketValueByZip().put(zip, avgMarketVal);
                     if (avgTotalLivableArea > 0)   cache.getAvgLivableAreaByZip().put(zip, avgTotalLivableArea);
                     if (totalMktVal > 0)   cache.getTotalMarketValueByZip().put(zip, totalMktVal);
                 }
+                System.err.println("HOUSING TASK FINISHED");
                 return null;
             };
 

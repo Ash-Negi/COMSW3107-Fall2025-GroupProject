@@ -17,6 +17,8 @@ public class Main {
             return;
         }
 
+        //need error handling for inappropiate number
+
         String format = args[0];
         String parkingFile = args[1];
         String propertyFile = args[2];
