@@ -61,4 +61,58 @@ public class ParkingProcessorTest {
 
         assertEquals(0.0, proc.getAverageFineInPhiladelphia());
     }
+
+    @Test
+    public void testZipIsEmptyString() {
+        ParkingProcessor p = new ParkingProcessor(List.of());
+        assertEquals(0, p.getViolationCountInZip(""));
+    }
+
+    @Test
+    public void testViolationHasEmptyZip() {
+        LocalDateTime now = LocalDateTime.now();
+
+        ParkingViolation v = new ParkingViolation(
+                now, 10, "desc", "V1", "PA", "ID1", ""
+        );
+
+        ParkingProcessor p = new ParkingProcessor(List.of(v));
+        assertEquals(0, p.getViolationCountInZip("19104"));
+    }
+
+    @Test
+    public void testViolationNotPA() {
+        LocalDateTime now = LocalDateTime.now();
+
+        ParkingViolation v = new ParkingViolation(
+                now, 10, "desc", "V1", "NJ", "ID1", "19104"
+        );
+
+        ParkingProcessor p = new ParkingProcessor(List.of(v));
+        assertEquals(0, p.getViolationCountInZip("19104"));
+    }
+
+    @Test
+    public void testFinesByZip_EmptyZipIgnored() {
+        LocalDateTime t = LocalDateTime.now();
+
+        ParkingViolation v = new ParkingViolation(
+                t, 50, "desc", "V1", "PA", "ID1", ""
+        );
+
+        ParkingProcessor p = new ParkingProcessor(List.of(v));
+        assertTrue(p.getTotalFinesByZip().isEmpty());
+    }
+
+    @Test
+    public void testFinesByZip_NullZipIgnored() {
+        LocalDateTime t = LocalDateTime.now();
+
+        ParkingViolation v = new ParkingViolation(
+                t, 50, "desc", "V1", "PA", "ID1", null
+        );
+
+        ParkingProcessor p = new ParkingProcessor(List.of(v));
+        assertTrue(p.getTotalFinesByZip().isEmpty());
+    }
 }
