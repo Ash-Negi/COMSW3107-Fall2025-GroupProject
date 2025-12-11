@@ -24,7 +24,6 @@ public class CityStatsProcessorTest {
     private CityStatsProcessor cityStatsProcessor;
 
     @BeforeEach
-    @AfterEach
     public void resetStatsCache() throws Exception {
         Field instanceField = StatsCache.class.getDeclaredField("cacheINSTANCE");
         instanceField.setAccessible(true);
