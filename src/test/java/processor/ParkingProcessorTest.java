@@ -11,18 +11,54 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ParkingProcessorTest {
 
     @Test
+    public void testViolationCountInZip() {
+        ParkingViolation v1 = new ParkingViolation(LocalDateTime.now(), 50, "desc", "V1", "PA", "ID1", "19104");
+        ParkingViolation v2 = new ParkingViolation(LocalDateTime.now(), 50, "desc", "V2", "PA", "ID2", "19104");
+        ParkingViolation v3 = new ParkingViolation(LocalDateTime.now(), 50, "desc", "V3", "NJ", "ID3", "19104"); // ignored
+
+        ParkingProcessor p = new ParkingProcessor(List.of(v1, v2, v3));
+
+        assertEquals(2, p.getViolationCountInZip("19104"));
+    }
+
+    @Test
     public void testTotalFinesByZip() {
-        List<ParkingViolation> mockData = List.of(
-                new ParkingViolation(LocalDateTime.now(), 50.0, "desc", "V1", "PA", "ID1", "19104"),
-                new ParkingViolation(LocalDateTime.now(), 30.0, "desc", "V2", "PA", "ID2", "19104"),
-                new ParkingViolation(LocalDateTime.now(), 10.0, "desc", "V3", "NJ", "ID3", "19104"), // should be ignored
-                new ParkingViolation(LocalDateTime.now(), 20.0, "desc", "V4", "PA", "ID4", null)     // ignored
-        );
+        ParkingViolation v1 = new ParkingViolation(LocalDateTime.now(), 40, "d", "V1", "PA", "ID1", "19104");
+        ParkingViolation v2 = new ParkingViolation(LocalDateTime.now(), 60, "d", "V2", "PA", "ID2", "19104");
 
-        ParkingProcessor pp = new ParkingProcessor(mockData);
-        Map<String, Double> result = pp.getTotalFinesByZip();
+        ParkingProcessor proc = new ParkingProcessor(List.of(v1, v2));
 
-        assertEquals(80.0, result.get("19104"));  // Only PA fines counted
-        assertFalse(result.containsKey("NJ"));
+        Map<String, Double> result = proc.getTotalFinesByZip();
+        assertEquals(100.0, result.get("19104"));
+    }
+
+    @Test
+    public void testTotalFinesIgnoresInvalidZip() {
+        ParkingViolation v1 = new ParkingViolation(LocalDateTime.now(), 40, "d", "V1", "PA", "ID1", "");
+        ParkingViolation v2 = new ParkingViolation(LocalDateTime.now(), 60, "d", "V2", "PA", "ID2", null);
+
+        ParkingProcessor proc = new ParkingProcessor(List.of(v1, v2));
+
+        Map<String, Double> result = proc.getTotalFinesByZip();
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testAverageFine() {
+        ParkingViolation v1 = new ParkingViolation(LocalDateTime.now(), 50, "d", "V1", "PA", "ID1", "19104");
+        ParkingViolation v2 = new ParkingViolation(LocalDateTime.now(), 100, "d", "V2", "PA", "ID2", "19104");
+
+        ParkingProcessor proc = new ParkingProcessor(List.of(v1, v2));
+
+        assertEquals(75.0, proc.getAverageFineInPhiladelphia());
+    }
+
+    @Test
+    public void testAverageFineNoValidEntries() {
+        ParkingViolation v1 = new ParkingViolation(LocalDateTime.now(), 0, "d", "V1", "PA", "ID1", "19104");
+
+        ParkingProcessor proc = new ParkingProcessor(List.of(v1));
+
+        assertEquals(0.0, proc.getAverageFineInPhiladelphia());
     }
 }

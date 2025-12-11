@@ -39,6 +39,8 @@ public class ParkingProcessor {
 
         int count = 0;
         for (ParkingViolation v : violations) {
+            if (v.getZipCode() == null || v.getZipCode().isEmpty()) continue;
+            if (!"PA".equals(v.getState())) continue;
             if (zip.equals(v.getZipCode())) {
                 count++;
             }
