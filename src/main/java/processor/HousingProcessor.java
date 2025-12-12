@@ -19,36 +19,23 @@ public class HousingProcessor {
 
     //option 3
     public double getAverageMarketValue(String zip){
-//        double total = 0.0;
-//        int count = 0;
-//
-//        for (Property p : properties) {
-//            if (p.getZipCode() != null && p.getZipCode().equals(zip)) {
-//                double value = p.getMarketValue();
-//                if (value > 0) { // ignore invalid
-//                    total += value;
-//                    count++;
-//                }
-//            }
-//        }
-//
-//        if (count == 0) return 0.0;
-//        return total / count;
-        if (zip == null) return 0;
 
-        double total = 0;
+        if(zip == null) return 0;
+
+        double total = 0.0;
         int count = 0;
 
         for (Property p : properties) {
-            if (zip.equals(p.getZipCode())) {
-                total += p.getMarketValue();
-                count++;
+            if (p.getZipCode().equals(zip)) {
+                double value = p.getMarketValue();
+                if (value > 0) { // ignore invalid, meaning -1.0 values we set in the loader
+                    total += value;
+                    count++;
+                }
             }
         }
 
-        System.err.println("FINISHED ZIP=" + zip + "  total=" + total + " count=" + count);
-
-        if (count == 0) return 0;
+        if (count == 0) return 0.0;
         return total / count;
     };
 

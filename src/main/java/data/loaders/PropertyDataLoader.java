@@ -61,50 +61,49 @@ public class PropertyDataLoader {
         return properties;
     }
 
-    private Property parsePropertyLine(String line, int marketValueIndex, int livableAreaIndex, int zipCodeIndex){
-        String[] fields = line.split(",");
+    private Property parsePropertyLine(String line, int marketValueIndex, int livableAreaIndex, int zipCodeIndex) {
+        //instead of returning null when number is invalid
+        //we'll assign a flag value so the valid parts of the row are saved
+        String[] fields = line.split(",",-1);
 
+        //Check if the number of columns are correct
         if(fields.length <= Math.max(marketValueIndex, Math.max(livableAreaIndex, zipCodeIndex))){
             return null;
         }
 
-        try{
-            // parse market value. skip if empty or invalid
-            String marketValueStr = fields[marketValueIndex].trim();
-            if(marketValueStr.isEmpty()){
-                return null;
-            }
-            double marketValue = Double.parseDouble(marketValueStr);
-            if(marketValue <= 0){
-                return null;
-            }
+        // 1. this is the parameter we return null for if its bad
+        String zipCode = fields[zipCodeIndex].trim();
+        // Spec says to strictly parse first 5 digits
+        if (zipCode.length() > 5) zipCode = zipCode.substring(0, 5);
 
-            // parse total livable area. skip if empty or invalid
-            String livableAreaStr = fields[livableAreaIndex].trim();
-            if(livableAreaStr.isEmpty()){
-                return null;
-            }
-            double livableArea = Double.parseDouble(livableAreaStr);
-            if(livableArea <= 0){
-                return null;
-            }
-
-            // parse zip code. take first 5 digits
-            String zipCode = fields[zipCodeIndex].trim();
-            if(zipCode.isEmpty()){
-                return null;
-            }
-            if(zipCode.length() > 5){
-                zipCode = zipCode.substring(0, 5);
-            }
-
-            return new Property(marketValue, livableArea, zipCode);
-        }
-        catch(NumberFormatException e){
+        if (zipCode.isEmpty() || !zipCode.matches("\\d{5}")) { // Validate 5 digits
             return null;
         }
-        catch(Exception e){
-            return null;
+
+        // market value, changed functionality to set to -1.0 if invalid, not returning null)
+        double marketValue = -1.0;
+        try {
+            String str = fields[marketValueIndex].trim();
+            if (!str.isEmpty()) {
+                double val = Double.parseDouble(str);
+                if (val > 0) marketValue = val; // Only accept positive
+            }
+        } catch (Exception ignored) {
+            // Keeps marketValue as -1.0
         }
+        // 3. setting to -1.0 if invalid, not returning null
+        double livableArea = -1.0;
+        try {
+            String str = fields[livableAreaIndex].trim();
+            if (!str.isEmpty()) {
+                double val = Double.parseDouble(str);
+                if (val > 0) livableArea = val; // Only accept positive
+            }
+        } catch (Exception ignored) {
+            // Keeps livableArea as -1.0
+        }
+
+        // Return the property even if marketValue or livableArea is flagged -1.0
+        return new Property(marketValue, livableArea, zipCode);
     }
 }
