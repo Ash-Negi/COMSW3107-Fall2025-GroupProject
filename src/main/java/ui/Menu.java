@@ -20,10 +20,16 @@ public class Menu {
 
             String input = scanner.next();
             if (!input.matches("\\d+")) {
+                System.out.println("Error: Input must be a number. Please try again.");
                 continue;
             }
 
             int choice = Integer.parseInt(input);
+
+            if (choice < 0 || choice > 7) {
+                System.out.println("Error: Invalid option. Please select a number between 0 and 7.");
+                continue;
+            }
 
             if (choice == 0) {
                 return;
